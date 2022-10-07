@@ -1,4 +1,27 @@
 
+def victory?(game_board, symbol)
+  count = 0
+  # per row
+  game_board.each do |k, v|
+    v.each do |el|
+      el == symbol ? count += 1 : count = 0
+      return true if count == 4
+    end
+  end
+  count = 0
+  # per column
+  for i in (0..7)
+    game_board.each do |k, v|
+      v[i] == symbol ? count += 1 : count = 0
+      return true if count == 4
+    end
+  end
+
+
+  return false
+end
+
+
 def game_board()
   round = 0
   victory = 0
@@ -50,21 +73,37 @@ def game_board()
         base -= 1
       end
     end
+    if victory?(board, "X")
+      puts 'winner is X'
+      break
+    end
     adv_played = false
     puts 'the opponent is thinking ....'
-    sleep(5)
+    sleep(0.5)
     while adv_played == false
       adv_base = 7
       adv = rand(0..7)
       while adv_base > 0
-        if board[:"#{base.to_s}"][adv] == "*"
-          board[:"#{base.to_s}"][adv] = "X"
+        if board[:"#{adv_base.to_s}"][adv] == "*"
+          board[:"#{adv_base.to_s}"][adv] = "X"
           board.each{ |k, v| puts v.join(" ") }
           adv_played = true
+          adv_base = 0
         else
           adv_base -= 1
         end
       end
+    end
+    if victory?(board, "0")
+      puts ''
+      puts ''
+      puts 'winner is 0'
+      break
+    elsif round == 56
+      puts ''
+      puts ''
+      puts 'square'
+      break
     end
   end
 end
