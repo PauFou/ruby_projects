@@ -17,7 +17,34 @@ def victory?(game_board, symbol)
     end
   end
 
-
+  playground_right = Marshal.load(Marshal.dump(game_board))
+  # the hard part, diago on the right
+  for i in (1..7)
+    i.times do
+      playground_right[:"#{i}"].unshift("*")
+    end
+  end
+  for i in (0..7)
+    playground_right.each do |k, v|
+      v[i] == symbol ? count += 1 : count = 0
+      return true if count == 4
+    end
+  end
+  # the hard part, diago on the left
+  playground_left = Marshal.load(Marshal.dump(game_board))
+  try = 7
+  for i in (1..7)
+    try.times do
+      playground_left[:"#{i}"].unshift("*")
+    end
+    try -= 1
+  end
+  for i in (0..7)
+    playground_left.each do |k, v|
+      v[i] == symbol ? count += 1 : count = 0
+      return true if count == 4
+    end
+  end
   return false
 end
 
@@ -78,7 +105,11 @@ def game_board()
       break
     end
     adv_played = false
+    puts ''
+    puts ''
     puts 'the opponent is thinking ....'
+    puts ''
+    puts ''
     sleep(0.5)
     while adv_played == false
       adv_base = 7
